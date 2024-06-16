@@ -15,6 +15,7 @@ const schema = z.object({
   category: z.enum(categories, {
     errorMap: () => ({ message: "category is required" }),
   }),
+
 });
 
 type ExpenseFormData = z.infer<typeof schema>;
@@ -28,7 +29,7 @@ function ExpenseForm({ onSubmit }: Props) {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors,isValid },
   } = useForm<ExpenseFormData>({ resolver: zodResolver(schema) });
 
   return (
@@ -86,7 +87,7 @@ function ExpenseForm({ onSubmit }: Props) {
           <p className="text-danger">{errors.category.message}</p>
         )}
       </div>
-      <button className="btn btn-primary mb-3">Submit</button>
+      <button disabled={!isValid} className="btn btn-primary mb-3">Submit</button>
     </form>
   );
 }
