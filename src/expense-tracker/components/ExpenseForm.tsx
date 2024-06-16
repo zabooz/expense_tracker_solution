@@ -22,16 +22,20 @@ type ExpenseFormData = z.infer<typeof schema>;
 interface Props {
   onSubmit: (data: ExpenseFormData) => void;
 }
-
+console.log(categories)
 function ExpenseForm({ onSubmit }: Props) {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<ExpenseFormData>({ resolver: zodResolver(schema) });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(data=> {
+      onSubmit(data)
+      reset()
+    })}>
       <div className="mb-3">
         <label htmlFor="description" className="form-label">
           Description
@@ -66,7 +70,6 @@ function ExpenseForm({ onSubmit }: Props) {
         </label>
         <select
           {...register("category")}
-          name=""
           id="category"
           className="form-select"
         >
